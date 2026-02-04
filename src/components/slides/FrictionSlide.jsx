@@ -1,167 +1,139 @@
 import { motion } from 'framer-motion';
-import { Mail, Clock, AlertTriangle, X, MessageSquare, Eye, EyeOff } from 'lucide-react';
+import { Mail, Clock, EyeOff, ChevronDown } from 'lucide-react';
 
 const emails = [
-  { from: 'Sarah K.', subject: 'Re: Re: Re: Meeting Time?', time: '2 min ago', preview: "Tuesday doesn't work for me either. What about Thursday?" },
-  { from: 'James R.', subject: 'Re: Re: Re: Re: Meeting Time?', time: '18 min ago', preview: "I'm OOO Thursday. Can we try next week?" },
-  { from: 'You', subject: 'Re: Re: Re: Re: Re: Meeting Time?', time: '45 min ago', preview: "How about Monday at 2pm? I'll also check with David..." },
-  { from: 'David L.', subject: 'Re: Availability Check', time: '1 hr ago', preview: "Sorry, I have a conflicting call. Let me check my calendar..." },
+  { from: 'Sarah K.', subject: 'Re: Re: Re: Meeting Time?', time: '2 min', preview: "Tuesday doesn't work either. Thursday?" },
+  { from: 'James R.', subject: 'Re: Re: Re: Re: Meeting Time?', time: '18 min', preview: "I'm OOO Thursday. Next week?" },
+  { from: 'You', subject: 'Re: Re: Re: Re: Re: Meeting Time?', time: '45 min', preview: "Monday at 2pm? Let me also check with David..." },
+  { from: 'David L.', subject: 'Re: Availability Check', time: '1 hr', preview: "Sorry, conflicting call. Let me check..." },
 ];
-
-const hiddenBlockers = [
-  { person: 'Sarah K.', reason: 'Private calendar — shows "Busy"', icon: EyeOff },
-  { person: 'James R.', reason: 'OOO not visible to organizer', icon: EyeOff },
-  { person: 'External VP', reason: 'No org-level calendar access', icon: X },
-];
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.15 },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, x: -20 },
-  visible: { opacity: 1, x: 0 },
-};
 
 export default function FrictionSlide() {
   return (
-    <div className="flex flex-col items-center justify-center h-full px-6 relative overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0">
-        <div className="absolute top-20 right-20 w-72 h-72 bg-red-500/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 left-20 w-72 h-72 bg-amber-500/5 rounded-full blur-3xl" />
-      </div>
-
-      <div className="relative z-10 max-w-5xl w-full">
-        {/* Header */}
+    <div className="flex items-center justify-center h-full px-8">
+      <div className="max-w-5xl w-full">
         <motion.div
-          className="text-center mb-10"
+          className="text-center mb-12"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
         >
-          <div className="flex items-center justify-center gap-2 mb-3">
-            <AlertTriangle className="w-6 h-6 text-amber-400" />
-            <h2 className="text-4xl md:text-5xl font-bold text-white">The Friction</h2>
-          </div>
-          <p className="text-lg text-slate-400">
-            Every urgent meeting triggers the same painful cycle
-          </p>
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-3">The Friction</h2>
+          <p className="text-lg text-gray-500">Manual scheduling is broken. Here's what it actually looks like.</p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* Email chain mockup */}
+        <div className="grid md:grid-cols-5 gap-6 items-start">
+          {/* Outlook inbox mockup — 3 cols */}
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
+            className="md:col-span-3"
+            initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3, duration: 0.6 }}
+            transition={{ delay: 0.3 }}
           >
-            <div className="bg-slate-900/80 backdrop-blur border border-slate-700/50 rounded-2xl overflow-hidden">
-              <div className="px-4 py-3 border-b border-slate-700/50 flex items-center gap-2">
-                <Mail className="w-4 h-4 text-slate-400" />
-                <span className="text-sm font-medium text-slate-300">Inbox</span>
-                <span className="ml-auto text-xs bg-red-500/20 text-red-400 px-2 py-0.5 rounded-full">47 unread</span>
+            <div className="rounded-xl bg-[#111827] border border-gray-700/50 overflow-hidden">
+              {/* Outlook-style header bar */}
+              <div className="bg-[#0f3460] px-4 py-2 flex items-center gap-3">
+                <div className="flex gap-1.5">
+                  <div className="w-2.5 h-2.5 rounded-full bg-white/20" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-white/20" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-white/20" />
+                </div>
+                <Mail className="w-3.5 h-3.5 text-white/60" />
+                <span className="text-[11px] text-white/70 font-medium">Outlook — Inbox</span>
+                <span className="ml-auto text-[10px] bg-red-500 text-white px-1.5 py-0.5 rounded-full font-medium">47</span>
               </div>
-              <motion.div
-                className="divide-y divide-slate-800/50"
-                variants={containerVariants}
-                initial="hidden"
-                animate="visible"
-              >
+
+              {/* Email list */}
+              <div className="divide-y divide-gray-800/50">
                 {emails.map((email, i) => (
                   <motion.div
                     key={i}
-                    variants={itemVariants}
-                    className="px-4 py-3 hover:bg-slate-800/30 cursor-default"
+                    className="px-4 py-3"
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.5 + i * 0.12 }}
                   >
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-sm font-semibold text-white">{email.from}</span>
-                      <span className="ml-auto text-[10px] text-slate-500">{email.time}</span>
+                    <div className="flex items-center gap-2 mb-0.5">
+                      <div className="w-6 h-6 rounded-full bg-gray-700 flex items-center justify-center text-[9px] text-gray-400 font-medium shrink-0">
+                        {email.from[0]}
+                      </div>
+                      <span className="text-[12px] font-semibold text-gray-300">{email.from}</span>
+                      <span className="ml-auto text-[10px] text-gray-600">{email.time}</span>
                     </div>
-                    <div className="text-xs text-slate-300 font-medium mb-0.5">{email.subject}</div>
-                    <div className="text-xs text-slate-500 truncate">{email.preview}</div>
+                    <div className="pl-8">
+                      <div className="text-[11px] text-gray-400 font-medium truncate">{email.subject}</div>
+                      <div className="text-[10px] text-gray-600 truncate">{email.preview}</div>
+                    </div>
                   </motion.div>
                 ))}
-              </motion.div>
-              <div className="px-4 py-3 border-t border-slate-700/50">
-                <div className="flex items-center gap-2 text-xs text-red-400">
-                  <MessageSquare className="w-3.5 h-3.5" />
-                  <span>12 emails exchanged over 3 days — still no meeting booked</span>
-                </div>
+              </div>
+
+              {/* Footer */}
+              <div className="px-4 py-2.5 border-t border-gray-800/50 flex items-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-red-400" />
+                <span className="text-[10px] text-red-400">12 emails over 3 days — no meeting booked</span>
               </div>
             </div>
           </motion.div>
 
-          {/* Hidden unavailability */}
+          {/* Stats — 2 cols */}
           <motion.div
-            className="flex flex-col gap-4"
-            initial={{ opacity: 0, x: 30 }}
+            className="md:col-span-2 space-y-4"
+            initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.5, duration: 0.6 }}
+            transition={{ delay: 0.5 }}
           >
-            {/* Time wasted counter */}
-            <div className="bg-slate-900/80 backdrop-blur border border-red-500/20 rounded-2xl p-5">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="p-2 rounded-lg bg-red-500/10">
-                  <Clock className="w-5 h-5 text-red-400" />
-                </div>
-                <div>
-                  <h3 className="text-sm font-semibold text-white">Time Wasted</h3>
-                  <p className="text-xs text-slate-400">Per scheduling attempt</p>
-                </div>
+            {/* Time wasted */}
+            <div className="rounded-xl bg-[#111827] border border-gray-700/50 p-5">
+              <div className="flex items-center gap-3 mb-4">
+                <Clock className="w-4 h-4 text-red-400" />
+                <span className="text-[12px] text-gray-400 font-medium">Time wasted per attempt</span>
               </div>
-              <div className="flex items-end gap-2">
-                <motion.span
-                  className="text-5xl font-bold text-red-400"
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.8, type: 'spring' }}
-                >
-                  3.2
-                </motion.span>
-                <span className="text-lg text-slate-400 mb-1">hrs avg.</span>
-              </div>
-              <div className="mt-3 w-full bg-slate-800 rounded-full h-2">
+              <motion.div
+                className="text-4xl font-bold text-red-400 mb-1"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.8, type: 'spring' }}
+              >
+                3.2 hrs
+              </motion.div>
+              <p className="text-[11px] text-gray-600">average scheduling overhead</p>
+              <div className="mt-3 w-full bg-gray-800 rounded-full h-1.5">
                 <motion.div
-                  className="bg-gradient-to-r from-red-500 to-amber-500 h-2 rounded-full"
+                  className="bg-red-500/80 h-1.5 rounded-full"
                   initial={{ width: 0 }}
                   animate={{ width: '78%' }}
-                  transition={{ delay: 1, duration: 1, ease: 'easeOut' }}
+                  transition={{ delay: 1, duration: 0.8 }}
                 />
               </div>
-              <p className="text-[10px] text-slate-500 mt-1">78% of admin time spent on scheduling logistics</p>
             </div>
 
             {/* Hidden blockers */}
-            <div className="bg-slate-900/80 backdrop-blur border border-amber-500/20 rounded-2xl p-5">
-              <div className="flex items-center gap-2 mb-4">
-                <Eye className="w-4 h-4 text-amber-400" />
-                <h3 className="text-sm font-semibold text-white">Hidden Unavailability</h3>
+            <div className="rounded-xl bg-[#111827] border border-gray-700/50 p-5">
+              <div className="flex items-center gap-3 mb-4">
+                <EyeOff className="w-4 h-4 text-amber-400" />
+                <span className="text-[12px] text-gray-400 font-medium">Hidden unavailability</span>
               </div>
-              <motion.div
-                className="space-y-3"
-                variants={containerVariants}
-                initial="hidden"
-                animate="visible"
-              >
-                {hiddenBlockers.map((blocker, i) => (
+              <div className="space-y-2.5">
+                {[
+                  { person: 'Sarah K.', reason: 'Private — shows "Busy"' },
+                  { person: 'James R.', reason: 'OOO not visible to you' },
+                  { person: 'External VP', reason: 'No cross-org calendar access' },
+                ].map((item, i) => (
                   <motion.div
                     key={i}
-                    variants={itemVariants}
-                    className="flex items-center gap-3 bg-slate-800/50 rounded-lg px-3 py-2"
+                    className="flex items-center gap-2.5"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 1.2 + i * 0.15 }}
                   >
-                    <blocker.icon className="w-4 h-4 text-amber-400 shrink-0" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-amber-400/60" />
                     <div>
-                      <span className="text-xs font-medium text-white">{blocker.person}</span>
-                      <p className="text-[10px] text-slate-400">{blocker.reason}</p>
+                      <span className="text-[11px] text-gray-300">{item.person}</span>
+                      <span className="text-[10px] text-gray-600 ml-1.5">— {item.reason}</span>
                     </div>
                   </motion.div>
                 ))}
-              </motion.div>
+              </div>
             </div>
           </motion.div>
         </div>
